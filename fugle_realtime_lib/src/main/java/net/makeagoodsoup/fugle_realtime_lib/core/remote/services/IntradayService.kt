@@ -1,5 +1,6 @@
 package net.makeagoodsoup.fugle_realtime_lib.core.remote.services
 
+import net.makeagoodsoup.fugle_realtime_lib.core.entities.ChartData
 import net.makeagoodsoup.fugle_realtime_lib.core.entities.Intraday
 import net.makeagoodsoup.fugle_realtime_lib.core.entities.MetaData
 import retrofit2.Response
@@ -12,4 +13,10 @@ interface IntradayService {
         @Query("symbolId") symbolId: String,
         @Query("apiToken") apiToken: String
     ): Response<Intraday<MetaData>>
+
+    @GET("intraday/chart")
+    suspend fun getChart(
+        @Query("symbolId") symbolId: String,
+        @Query("apiToken") apiToken: String
+    ): Response<Intraday<ChartData>>
 }
