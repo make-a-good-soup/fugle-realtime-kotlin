@@ -12,6 +12,12 @@ interface IntradayService {
         @Query("apiToken") apiToken: String
     ): Response<Intraday<MetaData>>
 
+    @GET("intraday/quote")
+    suspend fun getQuote(
+        @Query("symbolId") symbolId: String,
+        @Query("apiToken") apiToken: String
+    ): Response<Intraday<QuoteData>>
+
     @GET("intraday/chart")
     suspend fun getChart(
         @Query("symbolId") symbolId: String,
