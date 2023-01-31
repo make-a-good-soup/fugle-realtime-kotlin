@@ -15,7 +15,8 @@ interface IntradayService {
     @GET("intraday/quote")
     suspend fun getQuote(
         @Query("symbolId") symbolId: String,
-        @Query("apiToken") apiToken: String
+        @Query("apiToken") apiToken: String,
+        @Query("oddLot") oddLot: Boolean,
     ): Response<Intraday<QuoteData>>
 
     @GET("intraday/chart")

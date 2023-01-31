@@ -19,9 +19,9 @@ class FugleHttpRepository {
         }
     }
 
-    suspend fun getQuote(symbolId: String, apiToken: String): Result<QuoteData> {
+    suspend fun getQuote(symbolId: String, apiToken: String, oddLot: Boolean = false): Result<QuoteData> {
         return withContext(Dispatchers.IO) {
-            val response = ApiClient.makeIntradayService().getQuote(symbolId = symbolId, apiToken = apiToken)
+            val response = ApiClient.makeIntradayService().getQuote(symbolId = symbolId, apiToken = apiToken, oddLot = oddLot)
             val quoteData = response.body()?.data
             if (quoteData == null) {
                 Result.Error(NullPointerException("Response failed: ${response.message()}"))
