@@ -46,9 +46,9 @@ class FugleHttpRepository {
         }
     }
 
-    suspend fun getVolumes(symbolId: String, apiToken: String): Result<VolumesData> {
+    suspend fun getVolumes(symbolId: String, apiToken: String, oddLot: Boolean = false): Result<VolumesData> {
         return withContext(Dispatchers.IO) {
-            val response = ApiClient.makeIntradayService().getVolumes(symbolId = symbolId, apiToken = apiToken)
+            val response = ApiClient.makeIntradayService().getVolumes(symbolId = symbolId, apiToken = apiToken, oddLot = oddLot)
             val volumesData = response.body()?.data
             if (volumesData == null) {
                 Result.Error(NullPointerException("Response failed: ${response.message()}"))

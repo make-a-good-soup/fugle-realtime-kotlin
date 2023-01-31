@@ -30,6 +30,7 @@ interface IntradayService {
     @GET("intraday/volumes")
     suspend fun getVolumes(
         @Query("symbolId") symbolId: String,
-        @Query("apiToken") apiToken: String
+        @Query("apiToken") apiToken: String,
+        @Query("oddLot") oddLot: Boolean,
     ): Response<Intraday<VolumesData>>
 }
