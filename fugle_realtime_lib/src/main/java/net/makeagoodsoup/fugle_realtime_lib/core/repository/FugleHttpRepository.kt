@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import net.makeagoodsoup.fugle_realtime_lib.core.entities.ChartData
 import net.makeagoodsoup.fugle_realtime_lib.core.entities.DealtsData
 import net.makeagoodsoup.fugle_realtime_lib.core.entities.MetaData
+import net.makeagoodsoup.fugle_realtime_lib.core.entities.VolumesData
 import net.makeagoodsoup.fugle_realtime_lib.core.remote.ApiClient
 
 class FugleHttpRepository {
@@ -41,6 +42,18 @@ class FugleHttpRepository {
                 Result.Error(NullPointerException("Response failed: ${response.message()}"))
             } else {
                 Result.Success(dealtsData)
+            }
+        }
+    }
+
+    suspend fun getVolumes(symbolId: String, apiToken: String, oddLot: Boolean = false): Result<VolumesData> {
+        return withContext(Dispatchers.IO) {
+            val response = ApiClient.makeIntradayService().getVolumes(symbolId = symbolId, apiToken = apiToken, oddLot = oddLot)
+            val volumesData = response.body()?.data
+            if (volumesData == null) {
+                Result.Error(NullPointerException("Response failed: ${response.message()}"))
+            } else {
+                Result.Success(volumesData)
             }
         }
     }
