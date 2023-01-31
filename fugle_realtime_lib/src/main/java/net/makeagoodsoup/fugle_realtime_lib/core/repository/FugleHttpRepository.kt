@@ -33,9 +33,9 @@ class FugleHttpRepository {
         }
     }
 
-    suspend fun getDealts(symbolId: String, apiToken: String): Result<DealtsData> {
+    suspend fun getDealts(symbolId: String, apiToken: String, limit: Int = 50, offset: Int = 0, oddLot: Boolean = false): Result<DealtsData> {
         return withContext(Dispatchers.IO) {
-            val response = ApiClient.makeIntradayService().getDealts(symbolId = symbolId, apiToken = apiToken)
+            val response = ApiClient.makeIntradayService().getDealts(symbolId = symbolId, apiToken = apiToken, limit = limit, offset = offset, oddLot = oddLot)
             val dealtsData = response.body()?.data
             if (dealtsData == null) {
                 Result.Error(NullPointerException("Response failed: ${response.message()}"))

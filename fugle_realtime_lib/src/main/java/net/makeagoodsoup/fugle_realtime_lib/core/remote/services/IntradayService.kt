@@ -24,6 +24,9 @@ interface IntradayService {
     @GET("intraday/dealts")
     suspend fun getDealts(
         @Query("symbolId") symbolId: String,
-        @Query("apiToken") apiToken: String
+        @Query("apiToken") apiToken: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("oddLot") oddLot: Boolean,
     ): Response<Intraday<DealtsData>>
 }
