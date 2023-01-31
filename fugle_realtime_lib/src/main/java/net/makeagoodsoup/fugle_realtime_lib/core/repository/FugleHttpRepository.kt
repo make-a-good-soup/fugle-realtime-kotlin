@@ -2,10 +2,7 @@ package net.makeagoodsoup.fugle_realtime_lib.core.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.ChartData
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.DealtsData
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.MetaData
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.VolumesData
+import net.makeagoodsoup.fugle_realtime_lib.core.entities.*
 import net.makeagoodsoup.fugle_realtime_lib.core.remote.ApiClient
 
 class FugleHttpRepository {
@@ -18,6 +15,18 @@ class FugleHttpRepository {
                 Result.Error(NullPointerException("Response failed: ${response.message()}"))
             } else {
                 Result.Success(metaData)
+            }
+        }
+    }
+
+    suspend fun getQuote(symbolId: String, apiToken: String, oddLot: Boolean = false): Result<QuoteData> {
+        return withContext(Dispatchers.IO) {
+            val response = ApiClient.makeIntradayService().getQuote(symbolId = symbolId, apiToken = apiToken, oddLot = oddLot)
+            val quoteData = response.body()?.data
+            if (quoteData == null) {
+                Result.Error(NullPointerException("Response failed: ${response.message()}"))
+            } else {
+                Result.Success(quoteData)
             }
         }
     }
