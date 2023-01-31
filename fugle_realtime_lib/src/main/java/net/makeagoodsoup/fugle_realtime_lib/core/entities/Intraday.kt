@@ -8,4 +8,6 @@ data class ChartData(val info: Info, val chart: Chart)
 
 data class DealtsData(val info: Info, val dealts: List<Dealts>)
 
+data class VolumesData(val info: Info, val volumes: List<Volume>)
+
 // todo: 其他 data model

@@ -1,9 +1,6 @@
 package net.makeagoodsoup.fugle_realtime_lib.core.remote.services
 
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.ChartData
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.DealtsData
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.Intraday
-import net.makeagoodsoup.fugle_realtime_lib.core.entities.MetaData
+import net.makeagoodsoup.fugle_realtime_lib.core.entities.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -29,4 +26,11 @@ interface IntradayService {
         @Query("offset") offset: Int,
         @Query("oddLot") oddLot: Boolean,
     ): Response<Intraday<DealtsData>>
+
+    @GET("intraday/volumes")
+    suspend fun getVolumes(
+        @Query("symbolId") symbolId: String,
+        @Query("apiToken") apiToken: String,
+        @Query("oddLot") oddLot: Boolean,
+    ): Response<Intraday<VolumesData>>
 }
