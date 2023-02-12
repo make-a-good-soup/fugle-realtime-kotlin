@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -19,7 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fugle_realtime_kotlin_sample.ui.theme.FuglerealtimekotlinsampleTheme
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
+import net.makeagoodsoup.fugle_realtime_lib.core.remote.websocket.WebSocketClient
 import net.makeagoodsoup.fugle_realtime_lib.core.repository.FugleHttpRepository
 import net.makeagoodsoup.fugle_realtime_lib.core.repository.successOr
 
@@ -45,6 +49,7 @@ fun Body() {
                     .fillMaxSize()
             ) {
                 SendHttpRequestButton()
+                StartQuoteWebSocketButton()
                 Box(
                     modifier = Modifier
                         .height(16.dp)
@@ -71,13 +76,30 @@ fun SendHttpRequestButton() {
 }
 
 @Composable
+fun StartQuoteWebSocketButton() {
+    return Button(onClick = {
+        resultText.value = "InProgress"
+        GlobalScope.launch {
+            val result = WebSocketClient().quote("2884", "demo")
+            result.consumeEach {
+                resultText.value = it
+            }
+        }
+    }) {
+        Text(text = "Start Quote WebSocket")
+    }
+}
+
+@Composable
 fun TerminalText() {
     val text by resultText
+    val scroll = rememberScrollState(0)
     return Text(
         text = text, color = Color.White, fontSize = 16.sp, modifier = Modifier
             .background(color = Color.Black)
             .fillMaxHeight()
             .fillMaxWidth()
+            .verticalScroll(scroll)
     )
 }
 
