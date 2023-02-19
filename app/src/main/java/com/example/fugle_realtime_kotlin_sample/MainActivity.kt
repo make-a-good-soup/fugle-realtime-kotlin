@@ -20,24 +20,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fugle_realtime_kotlin_sample.ui.theme.FuglerealtimekotlinsampleTheme
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import net.makeagoodsoup.fugle_realtime_lib.core.remote.websocket.WebSocketClient
 import net.makeagoodsoup.fugle_realtime_lib.core.repository.FugleHttpRepository
 import net.makeagoodsoup.fugle_realtime_lib.core.repository.successOr
 
 class MainActivity : ComponentActivity() {
+    @DelicateCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Body()
         }
     }
+
+    override fun onDestroy() {
+        webSocketClient.disconnect()
+        super.onDestroy()
+    }
 }
 
 val resultText = mutableStateOf("")
+val webSocketClient: WebSocketClient by lazy { WebSocketClient() }
 
+@DelicateCoroutinesApi
 @Composable()
 fun Body() {
     return FuglerealtimekotlinsampleTheme {
@@ -61,6 +69,7 @@ fun Body() {
     }
 }
 
+@DelicateCoroutinesApi
 @Composable
 fun SendHttpRequestButton() {
     return Button(onClick = {
@@ -75,14 +84,15 @@ fun SendHttpRequestButton() {
     }
 }
 
+@DelicateCoroutinesApi
 @Composable
 fun StartQuoteWebSocketButton() {
     return Button(onClick = {
         resultText.value = "InProgress"
         GlobalScope.launch {
-            val result = WebSocketClient().quote("2884", "demo")
-            result.consumeEach {
-                resultText.value = it
+            val flow = webSocketClient.connectQuote("2884", "demo")
+            flow.collect {
+                resultText.value = it.toString()
             }
         }
     }) {
