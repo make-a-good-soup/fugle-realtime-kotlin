@@ -1,7 +1,8 @@
 package net.makeagoodsoup.fugle_realtime_lib.core.remote.websocket
 
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import net.makeagoodsoup.fugle_realtime_lib.core.entities.QuoteData
 
 interface FugleWebSocketClient {
-    fun quote(symbolId: String, apiToken: String): Channel<String>
+    fun connectQuote(symbolId: String, apiToken: String): Flow<QuoteData>
 }
