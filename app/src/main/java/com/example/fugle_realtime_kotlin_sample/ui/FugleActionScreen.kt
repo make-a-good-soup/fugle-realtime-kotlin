@@ -14,16 +14,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fugle_realtime_kotlin_sample.data.HttpData
 import com.example.fugle_realtime_kotlin_sample.ui.components.ActionButton
 
 val terminalTextContent = mutableStateOf("")
+private const val testSymbolId = "2884"
+private const val testToken = "demo"
 
 @ExperimentalMaterial3Api
 @Composable
-fun FugleActionScreen(title: String) {
+fun FugleActionScreen(title: String, actions: List<HttpData>) {
     Scaffold(
         topBar = { AppBarSection(title) },
-        bottomBar = { BottomNavigationSection() }
+        bottomBar = { BottomNavigationSection(actions) }
     ) {
         Box(modifier = Modifier.padding(it)) {
             TerminalTextSection(text = terminalTextContent.value)
@@ -40,7 +43,7 @@ private fun AppBarSection(title: String) {
 }
 
 @Composable
-private fun BottomNavigationSection() {
+private fun BottomNavigationSection(actions: List<HttpData>) {
     val scrollState = rememberScrollState()
 
     BottomAppBar {
@@ -50,8 +53,19 @@ private fun BottomNavigationSection() {
                 .horizontalScroll(scrollState),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            repeat(10) {
-                ActionButton(title = "test")
+            repeat(actions.size) {
+                if (it == 0 || it == actions.size - 1) {
+                    Box(modifier = Modifier.width(5.dp))
+                }
+                ActionButton(
+                    title = actions[it].name(),
+                    onClick = {
+                        actions[it].start(
+                            symbolId = testSymbolId,
+                            token = testToken,
+                            callback = { result -> terminalTextContent.value = result },
+                        )
+                    })
                 Box(modifier = Modifier.width(5.dp))
             }
         }
@@ -76,5 +90,5 @@ private fun TerminalTextSection(text: String) {
 @Preview(showBackground = true)
 @Composable
 fun FugleHttpScreenPreview() {
-    FugleActionScreen("Test Preview")
+    FugleActionScreen("Test Preview", actions = listOf())
 }
