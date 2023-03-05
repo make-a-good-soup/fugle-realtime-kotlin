@@ -3,6 +3,7 @@ package com.example.fugle_realtime_kotlin_sample.data
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.makeagoodsoup.fugle_realtime_lib.core.entities.stringify
 import net.makeagoodsoup.fugle_realtime_lib.core.repository.FugleHttpRepository
 import net.makeagoodsoup.fugle_realtime_lib.core.repository.successOr
 
@@ -20,7 +21,7 @@ sealed class HttpData : RequestDelegate {
             callback.invoke("InProgress")
             GlobalScope.launch {
                 val result = FugleHttpRepository().getMeta(symbolId, token)
-                callback.invoke("${result.successOr(null)}")
+                callback.invoke("${result.successOr(null)?.stringify()}")
             }
         }
     }
@@ -33,7 +34,7 @@ sealed class HttpData : RequestDelegate {
             callback.invoke("InProgress")
             GlobalScope.launch {
                 val result = FugleHttpRepository().getQuote(symbolId, token)
-                callback.invoke("${result.successOr(null)}")
+                callback.invoke("${result.successOr(null)?.stringify()}")
             }
         }
     }
