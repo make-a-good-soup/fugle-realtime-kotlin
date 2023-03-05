@@ -19,12 +19,14 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 1.8
+          distribution: 'adopt'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
           sdk-version: '31.0.0'
           ndk-version: '23.0.7599858'
+          distribution: 'cmdline-tools'
 
       - name: Check code warnings
         run: ./gradlew lintDebug
