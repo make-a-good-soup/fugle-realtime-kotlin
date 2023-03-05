@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,19 +16,29 @@ import androidx.compose.ui.unit.sp
 import com.example.fugle_realtime_kotlin_sample.data.HttpData
 import com.example.fugle_realtime_kotlin_sample.ui.components.ActionButton
 
-val terminalTextContent = mutableStateOf("")
 private const val testSymbolId = "2884"
 private const val testToken = "demo"
 
+/**
+ * @param title 頁面標題
+ * @param actions 要執行的行為  @see HttpData
+ * */
 @ExperimentalMaterial3Api
 @Composable
 fun FugleActionScreen(title: String, actions: List<HttpData>) {
+    var terminalTextContent by remember { mutableStateOf("") }
+
     Scaffold(
         topBar = { AppBarSection(title) },
-        bottomBar = { BottomNavigationSection(actions) }
+        bottomBar = {
+            BottomNavigationSection(
+                actions = actions,
+                actionCallback = { terminalTextContent = it },
+            )
+        }
     ) {
         Box(modifier = Modifier.padding(it)) {
-            TerminalTextSection(text = terminalTextContent.value)
+            TerminalTextSection(text = terminalTextContent)
         }
     }
 }
@@ -43,7 +52,7 @@ private fun AppBarSection(title: String) {
 }
 
 @Composable
-private fun BottomNavigationSection(actions: List<HttpData>) {
+private fun BottomNavigationSection(actions: List<HttpData>, actionCallback: ((String) -> Unit) = {}) {
     val scrollState = rememberScrollState()
 
     BottomAppBar {
@@ -63,7 +72,7 @@ private fun BottomNavigationSection(actions: List<HttpData>) {
                         actions[it].start(
                             symbolId = testSymbolId,
                             token = testToken,
-                            callback = { result -> terminalTextContent.value = result },
+                            callback = { result -> actionCallback.invoke(result) },
                         )
                     })
                 Box(modifier = Modifier.width(5.dp))
