@@ -42,6 +42,6 @@ fun ActionButton(title: String, onClick: (() -> Unit) = {}) {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+private fun DefaultPreview() {
     ActionButton(title = "test")
 }
