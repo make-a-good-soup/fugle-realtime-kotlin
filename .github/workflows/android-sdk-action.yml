@@ -26,6 +26,9 @@ jobs:
           sdk-version: '31.0.0'
           ndk-version: '23.0.7599858'
 
+      - name: Check code warnings
+        run: ./gradlew lintDebug
+
       - name: Build and Test
         run: |
           ./gradlew assembleDebug testDebug
