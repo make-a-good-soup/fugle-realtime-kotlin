@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import net.makeagoodsoup.fugle_realtime_lib.core.entities.ChartData
 import net.makeagoodsoup.fugle_realtime_lib.core.entities.Intraday
 import net.makeagoodsoup.fugle_realtime_lib.core.entities.QuoteData
 import okhttp3.OkHttpClient
@@ -70,6 +71,17 @@ class WebSocketClient : FugleWebSocketClient {
             Types.newParameterizedType(Intraday::class.java, QuoteData::class.java)
         )
         return connect("$BASE_URL/intraday/quote?symbolId=$symbolId&apiToken=$apiToken").map { json ->
+            adapter.fromJson(json)?.data ?: throw IllegalStateException("Invalid JSON: $json")
+        }
+    }
+
+    override fun connectChart(symbolId: String, apiToken: String): Flow<ChartData> {
+
+        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val adapter: JsonAdapter<Intraday<ChartData>> = moshi.adapter(
+            Types.newParameterizedType(Intraday::class.java, ChartData::class.java)
+        )
+        return connect("$BASE_URL/intraday/chart?symbolId=$symbolId&apiToken=$apiToken").map { json ->
             adapter.fromJson(json)?.data ?: throw IllegalStateException("Invalid JSON: $json")
         }
     }
