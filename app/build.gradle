@@ -80,6 +80,7 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:3.5.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
+    testImplementation 'junit:junit:4.13.2'
 
     // Fugle realtime dependency
     implementation project(path: ':fugle_realtime_lib')
