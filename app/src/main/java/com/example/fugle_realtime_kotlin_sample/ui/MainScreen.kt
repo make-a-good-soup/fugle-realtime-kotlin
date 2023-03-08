@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.fugle_realtime_kotlin_sample.data.HttpData
+import com.example.fugle_realtime_kotlin_sample.data.WebSocketData
 import com.example.fugle_realtime_kotlin_sample.ui.components.FTabItem
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -27,7 +28,7 @@ fun MainScreen() {
         Box(modifier = Modifier.weight(weight = 1f)) {
             when (selectedTabIndex) {
                 0 -> FugleActionScreen(title = "Http Sample", actions = HttpData.values())
-                1 -> FugleActionScreen(title = "WebSocket Sample", actions = listOf())
+                1 -> FugleActionScreen(title = "WebSocket Sample", actions = WebSocketData.values())
             }
         }
         Row(
