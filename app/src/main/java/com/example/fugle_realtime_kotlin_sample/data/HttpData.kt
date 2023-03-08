@@ -10,7 +10,8 @@ import net.makeagoodsoup.fugle_realtime_lib.core.repository.successOr
 sealed class HttpData : RequestDelegate {
 
     companion object {
-        fun values(): List<HttpData> = HttpData::class.sealedSubclasses.mapNotNull { it.objectInstance }
+        @DelicateCoroutinesApi
+        fun values(): List<HttpData> = listOf(Meta, Quote, Chart, Dealts, Volumes)
     }
 
     @DelicateCoroutinesApi
