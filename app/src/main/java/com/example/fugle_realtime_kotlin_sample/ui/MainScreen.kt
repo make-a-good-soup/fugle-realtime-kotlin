@@ -12,8 +12,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.fugle_realtime_kotlin_sample.data.HttpData
 import com.example.fugle_realtime_kotlin_sample.ui.components.FTabItem
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 
+@DelicateCoroutinesApi
 @ExperimentalMaterial3Api
 @Composable
 fun MainScreen() {
@@ -51,6 +53,7 @@ fun MainScreen() {
     }
 }
 
+@DelicateCoroutinesApi
 @ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
