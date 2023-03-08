@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.fugle_realtime_kotlin_sample.data.HttpData
+import com.example.fugle_realtime_kotlin_sample.data.RequestDelegate
 import com.example.fugle_realtime_kotlin_sample.ui.components.ActionButton
 
 private const val testSymbolId = "2884"
@@ -25,7 +25,7 @@ private const val testToken = "demo"
  * */
 @ExperimentalMaterial3Api
 @Composable
-fun FugleActionScreen(title: String, actions: List<HttpData>) {
+fun FugleActionScreen(title: String, actions: List<RequestDelegate>) {
     var terminalTextContent by remember { mutableStateOf("") }
 
     Scaffold(
@@ -52,7 +52,7 @@ private fun AppBarSection(title: String) {
 }
 
 @Composable
-private fun BottomNavigationSection(actions: List<HttpData>, actionCallback: ((String) -> Unit) = {}) {
+private fun BottomNavigationSection(actions: List<RequestDelegate>, actionCallback: ((String) -> Unit) = {}) {
     val scrollState = rememberScrollState()
 
     BottomAppBar {
