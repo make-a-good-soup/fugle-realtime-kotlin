@@ -13,6 +13,9 @@ sealed class WebSocketData : RequestDelegate {
 
     companion object {
         fun values(): List<RequestDelegate> = listOf(Meta, Quote, Chart)
+        private const val defaultSymbolId = "2884"
+        private const val apiToken = "demo"
+
     }
 
     val webSocketClient = WebSocketClient()
@@ -25,7 +28,7 @@ sealed class WebSocketData : RequestDelegate {
         override fun start(symbolId: String, token: String, callback: (String) -> Unit) {
             callback.invoke("InProgress")
             GlobalScope.launch {
-                val flow = webSocketClient.connectMeta("2884", "demo")
+                val flow = webSocketClient.connectMeta(defaultSymbolId, apiToken)
                 flow.collect {
                     callback.invoke(it.stringify())
                 }
@@ -43,7 +46,7 @@ sealed class WebSocketData : RequestDelegate {
         override fun start(symbolId: String, token: String, callback: (String) -> Unit) {
             callback.invoke("InProgress")
             GlobalScope.launch {
-                val flow = webSocketClient.connectQuote("2884", "demo")
+                val flow = webSocketClient.connectQuote(defaultSymbolId, apiToken)
                 flow.collect {
                     callback.invoke(it.stringify())
                 }
@@ -61,7 +64,7 @@ sealed class WebSocketData : RequestDelegate {
         override fun start(symbolId: String, token: String, callback: (String) -> Unit) {
             callback.invoke("InProgress")
             GlobalScope.launch {
-                val flow = webSocketClient.connectChart("2884", "demo")
+                val flow = webSocketClient.connectChart(defaultSymbolId, apiToken)
                 flow.collect {
                     callback.invoke(it.stringify())
                 }
