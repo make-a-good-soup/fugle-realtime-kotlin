@@ -1,0 +1,35 @@
+name: Publish to Maven
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+
+    - name: Setup Android
+      uses: actions/setup-android@v2
+      with:
+        sdk-version: '31'
+
+    - name: Build
+      run: ./gradlew build
+
+    - name: Publish
+      env:
+        USERNAME: ${{ secrets.MAVEN_USERNAME }}
+        PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+      run: |
+        ./gradlew :module_name:publish -Pversion=${{ github.ref }}
+
