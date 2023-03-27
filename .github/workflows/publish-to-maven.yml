@@ -1,35 +1,43 @@
-name: Publish to Maven
+name: Build and upload Android library
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - master
+  release:
+    types:
+      - created
 
 jobs:
-  build-and-publish:
+  build:
     runs-on: ubuntu-latest
+
+    env:
+      ANDROID_HOME: /opt/android-sdk-linux
+      PATH: /opt/gradle/bin:${PATH}
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
 
-    - name: Setup Android
-      uses: actions/setup-android@v2
-      with:
-        sdk-version: '31'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          sdk-version: '31'
+          emulator-version: '30.8.4'
+          arch: 'x86'
+          script-parameters: '--install "platform-tools"'
 
-    - name: Build
-      run: ./gradlew build
+      - name: Build Android library
+        run: ./gradlew :fugle_realtime_lib:assembleRelease
 
-    - name: Publish
-      env:
-        USERNAME: ${{ secrets.MAVEN_USERNAME }}
-        PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-      run: |
-        ./gradlew :module_name:publish -Pversion=${{ github.ref }}
-
+      - name: Upload Android library artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: library-release
+          path: app/build/outputs/aar/library-release.aar
