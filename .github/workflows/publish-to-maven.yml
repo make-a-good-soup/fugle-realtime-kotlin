@@ -18,6 +18,9 @@ jobs:
       PATH: /opt/gradle/bin:${PATH}
 
     steps:
+      - name: Setup tar command
+        run: sudo apt-get update && sudo apt-get install -y tar
+
       - name: Checkout code
         uses: actions/checkout@v2
 
