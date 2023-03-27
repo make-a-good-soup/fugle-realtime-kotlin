@@ -2,8 +2,9 @@ name: Build and upload Android library
 
 on:
   push:
-    branches:
-      - master
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
   release:
     types:
       - created
